@@ -1,0 +1,11 @@
+;PreservationSubstance
+0,this is a comment and should not appear in results
+5,brine
+5,alcohol
+5,oil
+2,salt packing
+2,pickling fluid
+2,clear gelatin
+2,clear syrup
+1,ether
+1,formaldehyde

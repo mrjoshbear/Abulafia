@@ -1,0 +1,23 @@
+;main
+0,this is a comment and should not appear in results
+1,[malefirst] [surname]
+1,[femalefirst] [surname]
+
+;malefirst
+1,John
+1,Paul
+1,George
+1,Ringo
+
+;femalefirst
+1,Juana
+1,Paulina
+1,Georgia
+1,Yoko
+
+;surname
+1,Lennon
+1,McCartney
+1,Harrison
+1,Starr
+1,Ono

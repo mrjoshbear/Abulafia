@@ -1,0 +1,12 @@
+;vampireName
+0,this is a comment and should not appear in results
+1,[vampireTitle] [vampireNamePart]
+
+;vampireTitle
+0,this is a comment and should not appear in results
+1,Count
+
+;vampireNamePart
+0,this is a comment and should not appear in results
+1,Raven
+1,[vampireNamePart]
