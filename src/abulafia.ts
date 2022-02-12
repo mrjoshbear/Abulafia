@@ -100,6 +100,9 @@ class Abulafia {
           }
         }
         if (list.length > 0) {
+          if (this.hasTable(tableName)) {
+            console.warn(`Abulafia Warning: overwrote entries for table "${tableName}"`);
+          }
           this.data.set(tableName, list);                   /* add the table to our data set, overwriting if needed */
         } else {                                            /* warn if we skipped a table because it has no entries */
           console.warn(`Abulafia Warning: table "${tableName}" has no entries and was skipped`);

@@ -1,0 +1,6 @@
+;foobar
+1,foo
+1,bar
+
+;notMain
+1,[baz]

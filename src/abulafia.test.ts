@@ -113,6 +113,31 @@ describe('Tests for abulafia.js', () => {
     expect(console.error).toHaveBeenCalledTimes(0);
   });
 
+  it('loads a minimal table twice and logs a warning and returns correct output', () => {
+    // arrange
+    console.warn = jest.fn();
+    console.error = jest.fn();
+    const file = ";key\n1,value";
+    const abulafia = new Abulafia();
+    // act
+    abulafia.load(file);
+    abulafia.load(file);
+    const actualTableNames = abulafia.getTableNames();
+    const actualHasTable = abulafia.hasTable("key");
+    const actualValue = abulafia.get("key");
+    const actualList = abulafia.getList("key");
+    const actualAudit = abulafia.auditForMissingTables();
+    // assert
+    expect(actualTableNames).toEqual(["key"]);
+    expect(actualHasTable).toBeTruthy();
+    expect(actualValue).toEqual("value");
+    expect(actualList).toEqual(["value"]);
+    expect(actualAudit).toEqual([]);
+    expect(console.warn).toHaveBeenCalledWith('Abulafia Warning: overwrote entries for table "key"')
+    expect(console.warn).toHaveBeenCalledTimes(1);
+    expect(console.error).toHaveBeenCalledTimes(0);
+  });
+
   it('loads a minimal table with a 10+ entry and returns correct output', () => {
     // arrange
     console.warn = jest.fn();
@@ -373,6 +398,47 @@ describe('Tests for abulafia.js', () => {
     expect(actualValue).not.toContain("comment");
     expect(actualValue).toContain("Count");
     expect(actualValue).toContain("Raven");
+    expect(console.warn).toHaveBeenCalledTimes(0);
+    expect(console.error).toHaveBeenCalledTimes(0);
+  });
+
+  it('loads two files with cross-file references and produces correct output', () => {
+    // arrange
+    console.warn = jest.fn();
+    console.error = jest.fn();
+    const fileContent1 = fs.readFileSync("./test-tables/cross-file-tables1.txt", {encoding:'utf8', flag:'r'});
+    const fileContent2 = fs.readFileSync("./test-tables/cross-file-tables2.txt", {encoding:'utf8', flag:'r'});
+    const abulafia = new Abulafia();
+    // act
+    abulafia.load(fileContent1);
+    abulafia.load(fileContent2);
+    const actualTableNames = abulafia.getTableNames();
+    const actualHasTable1 = abulafia.hasTable("main");
+    const actualHasTable2 = abulafia.hasTable("notMain");
+    const actualHasTable3 = abulafia.hasTable("foobar");
+    const actualHasTable4 = abulafia.hasTable("baz");
+
+    const actualList = abulafia.getList("main");
+    const actualAudit = abulafia.auditForMissingTables();
+    const actualValue1 = abulafia.get("main");
+    const actualValue2 = abulafia.get("notMain");
+    // assert
+    expect(fileContent1).toBeDefined();
+    expect(fileContent2).toBeDefined();
+    expect(actualTableNames).toEqual(["main", "baz", "foobar", "notMain"]);
+    expect(actualHasTable1).toBeTruthy();
+    expect(actualHasTable2).toBeTruthy();
+    expect(actualHasTable3).toBeTruthy();
+    expect(actualHasTable4).toBeTruthy();
+    expect(actualList.length).toEqual(1);
+    expect(actualList).not.toContain("comment");
+    expect(actualAudit).toEqual([]);
+    expect(actualValue1).toBeDefined();
+    expect("foobar").toContain(actualValue1)
+    expect(actualValue1).not.toContain("comment");
+    expect(actualValue2).toBeDefined();
+    expect(actualValue2).toEqual("baz");
+    expect(actualValue2).not.toContain("comment");
     expect(console.warn).toHaveBeenCalledTimes(0);
     expect(console.error).toHaveBeenCalledTimes(0);
   });

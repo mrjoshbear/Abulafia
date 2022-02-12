@@ -1,0 +1,6 @@
+;main
+0,this is a comment and should not appear in output
+1,[foobar]
+
+;baz
+1,baz
